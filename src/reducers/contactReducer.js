@@ -6,6 +6,7 @@ import {
   UPDATE_CONTACT,
   FILTER_CONTACT,
   CLEAR_FILTER,
+  SET_LOADING,
 } from "../actions/types";
 
 const initialState = {
@@ -32,10 +33,41 @@ const initialState = {
       relationShip: "professional",
     },
   ],
+  current: null,
+  loading: false,
+  error: null,
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case ADD_CONTACT:
+      return {
+        ...state,
+        contacts: [...state.contacts, action.payload],
+      };
+    case DELETE_CONTACT:
+      return {
+        ...state,
+        contacts: state.contacts.filter(
+          (contact) => contact.id !== action.payload
+        ),
+      };
+    case SET_CURRENT:
+      return {
+        ...state,
+        current: action.payload,
+      };
+    case CLEAR_CURRENT:
+      return {
+        ...state,
+        current: null,
+      };
+
+    case SET_LOADING:
+      return {
+        ...state,
+        loading: true,
+      };
     default:
       return state;
   }
