@@ -2,14 +2,27 @@ import React, { useState, useEffect } from "react";
 import { connect } from "react-redux";
 import { register, clearErrors } from "../../actions/authActions";
 import { setAlert } from "../../actions/alertAction";
+import { useHistory } from "react-router-dom";
 
-const Register = ({ register, clearErrors, setAlert, error }) => {
+const Register = ({
+  register,
+  clearErrors,
+  setAlert,
+  error,
+  isAuthenticated,
+}) => {
+  let history = useHistory();
+
   useEffect(() => {
+    if (isAuthenticated) {
+      history.push("/");
+    }
     if (error === "A User with this email already exists") {
       setAlert(error, "danger");
       clearErrors();
     }
-  }, [error]);
+    // eslint-disable-next-line
+  }, [error, isAuthenticated, history]);
 
   const [user, setUser] = useState({
     name: "",
@@ -39,6 +52,7 @@ const Register = ({ register, clearErrors, setAlert, error }) => {
         password: "",
         password2: "",
       });
+      setAlert("User Register", "primary");
     }
   };
 
@@ -86,6 +100,7 @@ const Register = ({ register, clearErrors, setAlert, error }) => {
 
 const mapStateToProps = (state) => ({
   error: state.auth.error,
+  isAuthenticated: state.auth.isAuthenticated,
 });
 
 export default connect(mapStateToProps, { register, clearErrors, setAlert })(

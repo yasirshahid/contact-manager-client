@@ -1,6 +1,26 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
+import { useHistory } from "react-router-dom";
+import { setAlert } from "../../actions/alertAction";
+import { login, clearErrors } from "../../actions/authActions";
 
-const Login = () => {
+const Login = ({ isAuthenticated, error, login, setAlert, clearErrors }) => {
+  let history = useHistory();
+  useEffect(() => {
+    if (isAuthenticated) {
+      history.push("/");
+    }
+    if (error === "Email does not exists") {
+      setAlert(error, "danger");
+      clearErrors();
+    } else if (error === "Incorrect password") {
+      setAlert(error, "danger");
+      clearErrors();
+    }
+
+    // eslint-disable-next-line
+  }, [error, isAuthenticated, history]);
+
   const [user, setUser] = useState({
     email: "",
     password: "",
@@ -11,7 +31,11 @@ const Login = () => {
   };
   const onSubmit = (e) => {
     e.preventDefault();
-    console.log("User logged In");
+    if (email === "" || password === "") {
+      setAlert("Please fill the login form", "danger");
+    } else {
+      login({ email, password });
+    }
   };
   return (
     <div className='form-container'>
@@ -40,4 +64,11 @@ const Login = () => {
   );
 };
 
-export default Login;
+const mapStateToProps = (state) => ({
+  error: state.auth.error,
+  isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { setAlert, login, clearErrors })(
+  Login
+);

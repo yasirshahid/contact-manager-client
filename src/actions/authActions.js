@@ -12,7 +12,7 @@ import {
 } from "./types";
 
 // load User
-export const loadUser = async (dispatch) => {
+export const loadUser = () => async (dispatch) => {
   if (localStorage.token) {
     setAuthToken(localStorage.token);
   }
