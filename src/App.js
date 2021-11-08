@@ -10,6 +10,7 @@ import setAuthToken from "./utils/setAuthToken";
 import store from "./store";
 
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
+// import PrivateRoute from "./components/routing/PrivateRoute";
 import "./App.css";
 
 if (localStorage.token) {

@@ -1,8 +1,11 @@
 import {
   ADD_CONTACT,
   DELETE_CONTACT,
+  CONTACT_ERROR,
   SET_CURRENT,
   CLEAR_CURRENT,
+  GET_CONTACTS,
+  CLEAR_CONTACTS,
   UPDATE_CONTACT,
   FILTER_CONTACT,
   CLEAR_FILTER,
@@ -10,36 +13,21 @@ import {
 } from "../actions/types";
 
 const initialState = {
-  contacts: [
-    {
-      id: 1,
-      name: "yasir",
-      email: "yasirshahid5@gmaail.com",
-      phone: "111-111-1111",
-      relationShip: "personal",
-    },
-    {
-      id: 2,
-      name: "ٓAdil",
-      email: "adil@gmaail.com",
-      phone: "222-222-2222",
-      relationShip: "professional",
-    },
-    {
-      id: 3,
-      name: "ٓZia",
-      email: "Zia@gmaail.com",
-      phone: "333-333-3333",
-      relationShip: "professional",
-    },
-  ],
+  contacts: null,
   current: null,
+  filtered: null,
   loading: false,
   error: null,
 };
 
 export default (state = initialState, action) => {
   switch (action.type) {
+    case GET_CONTACTS:
+      return {
+        ...state,
+        contacts: action.payload,
+        loading: false,
+      };
     case ADD_CONTACT:
       return {
         ...state,
@@ -52,6 +40,14 @@ export default (state = initialState, action) => {
           (contact) => contact.id !== action.payload
         ),
       };
+    case CLEAR_CONTACTS:
+      return {
+        ...state,
+        contacts: null,
+        filtered: null,
+        error: null,
+        current: null,
+      };
     case SET_CURRENT:
       return {
         ...state,
@@ -61,6 +57,11 @@ export default (state = initialState, action) => {
       return {
         ...state,
         current: null,
+      };
+    case CONTACT_ERROR:
+      return {
+        ...state,
+        error: action.payload,
       };
 
     case SET_LOADING:
